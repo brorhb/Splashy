@@ -46,7 +46,7 @@ export default class HomeScreen extends Component {
       {loading
         ? <Text>loading</Text>
         : <ScrollView style={{paddingHorizontal: 8}}>
-            <View style={{paddingBottom: 8}}>
+            <View style={{paddingBottom: 8, paddingTop: 16}}>
               <Text note>{date}/{month}/{year}</Text>
               <H1>Today</H1>
             </View>
@@ -59,7 +59,7 @@ export default class HomeScreen extends Component {
                   height={300}
                   width={400}
                   resizeMode='cover'
-                  resizeMethod='scale'/>
+                  resizeMethod='resize'/>
                 </View>
               <View style={styles.cardTextContainer}>
                 <Text style={styles.cardText}>Author</Text>
@@ -78,7 +78,7 @@ export default class HomeScreen extends Component {
                   height={300}
                   width={400}
                   resizeMode='cover'
-                  resizeMethod='scale'/>
+                  resizeMethod='resize'/>
                 </View>
               <View style={styles.cardTextContainer}>
                 <Text style={styles.cardText}>Author</Text>
@@ -97,7 +97,7 @@ export default class HomeScreen extends Component {
                   height={300}
                   width={400}
                   resizeMode='cover'
-                  resizeMethod='scale'/>
+                  resizeMethod='resize'/>
                 </View>
               <View style={styles.cardTextContainer}>
                 <Text style={styles.cardText}>Author</Text>
@@ -116,7 +116,8 @@ export default class HomeScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {flex: 1,
+  container: {
+    flex: 1,
     flexDirection: 'column',
     backgroundColor: 'white'
   },
@@ -127,11 +128,11 @@ const styles = StyleSheet.create({
     shadowOffset:{ width: 0, height: 0, },
     shadowColor: '#333',
     shadowRadius: 8,
-    shadowOpacity: 0.5
+    shadowOpacity: 0.1
   },
   cardTextContainer: {
     position: 'absolute',
-    padding: 8,
+    padding: 16,
     borderTopLeftRadius: 16,
     borderBottomRightRadius: 16,
     backgroundColor: 'rgba(0, 0, 0, 0.1)'
