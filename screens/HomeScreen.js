@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   cardTextContainer: {
     position: 'absolute',
     padding: 8,
-    borderTopLeftRadius: 0,
+    borderTopLeftRadius: 16,
     borderBottomRightRadius: 16,
     backgroundColor: 'rgba(0, 0, 0, 0.1)'
   },
@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
     borderRadius: 0
   },
   cardImgContainer: {
+    borderRadius: 16,
     overflow: 'hidden'
   }
 })
