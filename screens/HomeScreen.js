@@ -8,6 +8,13 @@ import {
 } from 'react-native'
 import { Text, H1 } from 'native-base'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
+import Unsplash, { toJson } from 'unsplash-js/native'
+
+const unsplash = new Unsplash({
+  applicationId: 'ea2ba80d2ab325bf1b186466579b5859e560890f6ab977a8d9853cfa33abe497',
+  secret: '0a8df389774ebf8879bef6486b8f4e35fbb4ffc2d153f6961f410fa3e051bc37',
+  callbackUrl: "urn:ietf:wg:oauth:2.0:oob"
+})
 
 export default class HomeScreen extends Component {
   static navigationOptions = {
@@ -21,7 +28,8 @@ export default class HomeScreen extends Component {
       year: '',
       date: '',
       month: '',
-      loading: true
+      loading: true,
+      data: {}
     }
     this.getCurrentDay = this.getCurrentDay.bind(this)
   }
@@ -36,11 +44,17 @@ export default class HomeScreen extends Component {
 
   componentWillMount() {
     this.getCurrentDay()
-    this.setState({ loading: false })
+      unsplash.photos.listPhotos()
+        .then(toJson)
+        .then(json => {
+          this.setState({data: json})
+        })
+        .then(() => {this.setState({loading: false})})
   }
 
   render () {
-    var { year, date, month, loading } = this.state
+    var { year, date, month, loading, data } = this.state
+    !loading ? console.log(data.map((item) => item)) : console.log('loading')
     return (
       <SafeAreaView style={styles.container}>
       {loading
@@ -51,62 +65,27 @@ export default class HomeScreen extends Component {
               <H1>Today</H1>
             </View>
 
-            <View style={styles.card}>
-              <View style={styles.cardImgContainer}>
-                <Image
-                  style={styles.img}
-                  source={require('../sample/img.jpg')}
-                  height={300}
-                  width={400}
-                  resizeMode='cover'
-                  resizeMethod='resize'/>
-                </View>
-              <View style={styles.cardTextContainer}>
-                <Text style={styles.cardText}>Author</Text>
-                <View style={{flex: 1, flexDirection: 'row'}}>
-                  <MaterialCommunityIcons color={'#FF725C'} name="heart" size={16} />
-                  <Text note style={styles.cardText}>Likes</Text>
-                </View>
-              </View>
-            </View>
-
-            <View style={styles.card}>
-              <View style={styles.cardImgContainer}>
-                <Image
-                  style={styles.img}
-                  source={require('../sample/img2.jpg')}
-                  height={300}
-                  width={400}
-                  resizeMode='cover'
-                  resizeMethod='resize'/>
-                </View>
-              <View style={styles.cardTextContainer}>
-                <Text style={styles.cardText}>Author</Text>
-                <View style={{flex: 1, flexDirection: 'row'}}>
-                  <MaterialCommunityIcons color={'#FF725C'} name="heart" size={16} />
-                  <Text note style={styles.cardText}>Likes</Text>
+            { data.map((item) => (
+              <View key={item.id} style={styles.card}>
+                <View style={styles.cardImgContainer}>
+                  <Image
+                    style={styles.img}
+                    source={{uri: item.urls.small}}
+                    height={300}
+                    width={400}
+                    resizeMode='cover'
+                    resizeMethod='resize'/>
+                  </View>
+                <View style={styles.cardTextContainer}>
+                  <Text style={styles.cardText}>{item.user.name}</Text>
+                  <View style={{flex: 1, flexDirection: 'row'}}>
+                    <MaterialCommunityIcons color={'#FF725C'} name="heart" size={16} />
+                    <Text note style={styles.cardText}>{item.likes}</Text>
+                  </View>
                 </View>
               </View>
-            </View>
-
-            <View style={styles.card}>
-              <View style={styles.cardImgContainer}>
-                <Image
-                  style={styles.img}
-                  source={require('../sample/img3.jpg')}
-                  height={300}
-                  width={400}
-                  resizeMode='cover'
-                  resizeMethod='resize'/>
-                </View>
-              <View style={styles.cardTextContainer}>
-                <Text style={styles.cardText}>Author</Text>
-                <View style={{flex: 1, flexDirection: 'row'}}>
-                  <MaterialCommunityIcons color={'#FF725C'} name="heart" size={16} />
-                  <Text note style={styles.cardText}>Likes</Text>
-                </View>
-              </View>
-            </View>
+            ))
+            }
 
           </ScrollView>
       } 
